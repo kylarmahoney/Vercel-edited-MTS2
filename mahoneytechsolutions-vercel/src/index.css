@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--bg));
+  --color-foreground: hsl(var(--ink));
+  
+  --color-bg: hsl(var(--bg));
+  --color-bg2: hsl(var(--bg2));
+  --color-ink: hsl(var(--ink));
+  --color-ink2: hsl(var(--ink2));
+  --color-rust: hsl(var(--rust));
+  --color-rust2: hsl(var(--rust2));
+  --color-steel: hsl(var(--steel));
+  --color-line: hsl(var(--line));
+  --color-white: hsl(var(--white));
+
+  --color-border: hsl(var(--line));
+  --color-input: hsl(var(--ink2));
+  --color-ring: hsl(var(--rust));
+
+  --color-primary: hsl(var(--rust));
+  --color-primary-foreground: hsl(var(--white));
+  
+  --color-secondary: hsl(var(--ink));
+  --color-secondary-foreground: hsl(var(--white));
+
+  --color-muted: hsl(var(--bg2));
+  --color-muted-foreground: hsl(var(--steel));
+
+  --color-accent: hsl(var(--ink2));
+  --color-accent-foreground: hsl(var(--white));
+
+  --color-destructive: hsl(var(--rust2));
+  --color-destructive-foreground: hsl(var(--white));
+
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-display: 'Bebas Neue', sans-serif;
+}
+
+:root {
+  /* H S% L% format — matches MTS business card palette */
+  --bg: 216 42% 9%;      /* deep navy #0d1929 */
+  --bg2: 216 38% 14%;    /* slightly lighter navy #142338 */
+  --ink: 0 0% 97%;       /* near-white text #f7f7f7 */
+  --ink2: 215 22% 80%;   /* light blue-gray #bcc9d9 */
+  --rust: 213 68% 46%;   /* MTS shield blue #2567c4 */
+  --rust2: 210 72% 62%;  /* lighter accent blue #4a90e2 */
+  --steel: 213 22% 58%;  /* muted steel blue #7a96b8 */
+  --line: 215 30% 20%;   /* dark blue border #222f42 */
+  --white: 0 0% 100%;    /* pure white */
+
+  --radius: 0px; /* Brutalist sharp corners */
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+
+  body {
+    @apply font-sans antialiased bg-bg text-ink overflow-x-hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-wide uppercase;
+  }
+}
+
+@layer utilities {
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+  }
+
+  .circuit-bg {
+    background-image: 
+      linear-gradient(rgba(192, 57, 43, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(192, 57, 43, 0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .circuit-dots {
+    background-image: radial-gradient(rgba(192, 57, 43, 0.3) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 20px 20px;
+  }
+
+  .map-grid {
+    background-image: 
+      linear-gradient(rgba(192, 57, 43, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(192, 57, 43, 0.07) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .animate-ping-slow {
+    animation: ping-slow 2s ease-in-out infinite;
+  }
+}
+
+@keyframes ping-slow {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(192, 57, 43, 0.2); }
+  50% { box-shadow: 0 0 0 14px rgba(192, 57, 43, 0.05); }
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--ink));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--ink2));
+  border: 1px solid hsl(var(--ink));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--rust));
+}
+
+video.hero-bg::-webkit-media-controls-start-playback-button,
+video.hero-bg::-webkit-media-controls-panel,
+video.hero-bg::-webkit-media-controls {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+video.hero-bg {
+  -webkit-appearance: none;
+  pointer-events: none;
+}
