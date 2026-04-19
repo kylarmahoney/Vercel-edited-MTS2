@@ -17,13 +17,15 @@ export async function POST(req) {
       from: "Mahoney Tech Solutions <noreply@mahoneytechsolutions.com>",
       to: "kylar@mahoneytechsolutions.com",
       subject: `New Lead: ${cleanService} — ${cleanName}`,
-      html: `
-        <h2>New Lead</h2>
-        <p><strong>Name:</strong> ${cleanName}</p>
-        <p><strong>Contact:</strong> ${cleanContact}</p>
-        <p><strong>Service:</strong> ${cleanService}</p>
-        <p><strong>Message:</strong> ${cleanMessage}</p>
-      `,
+      template: {
+        alias: "new-lead-inquiry",
+        variables: {
+          NAME: cleanName,
+          CONTACT: cleanContact,
+          SERVICE: cleanService,
+          MESSAGE: cleanMessage,
+        },
+      },
     };
 
     if (isEmail) {
