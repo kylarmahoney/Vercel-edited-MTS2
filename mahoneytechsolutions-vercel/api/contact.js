@@ -1,32 +1,41 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
-
+export async function POST(req) {
   try {
-    const { name, contact, service, message } = req.body;
+    const body = await req.json();
+    const { name, email, phone, service, message } = body;
 
-    await resend.emails.send({
-      from: 'Mahoney Tech Solutions <noreply@mahoneytechsolutions.com>',
-      to: 'kylar@mahoneytechsolutions.com',
-      replyTo: contact,
+    const payload = {
+      from: "Mahoney Tech Solutions <noreply@mahoneytechsolutions.com>",
+      to: "kylar@mahoneytechsolutions.com",
       subject: `New Lead: ${service} — ${name}`,
       html: `
         <h2>New Lead</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Contact:</strong> ${contact}</p>
-        <p><strong>Service:</strong> ${service}</p>
-        <p><strong>Message:</strong> ${message}</p>
+        <p><strong>Name:</strong> ${name || ""}</p>
+        <p><strong>Email:</strong> ${email || "Not provided"}</p>
+        <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+        <p><strong>Service:</strong> ${service || ""}</p>
+        <p><strong>Message:</strong> ${message || ""}</p>
       `,
-    });
+    };
 
-    return res.status(200).json({ success: true });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Email failed to send' });
+    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      payload.reply_to = email;
+    }
+
+    const { data, error } = await resend.emails.send(payload);
+
+    if (error) {
+      return new Response(JSON.stringify({ error }), { status: 400 });
+    }
+
+    return new Response(JSON.stringify({ success: true, data }), { status: 200 });
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: err.message || "Server error" }),
+      { status: 500 }
+    );
   }
 }
