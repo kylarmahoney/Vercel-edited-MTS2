@@ -18,7 +18,7 @@ export async function POST(req) {
       to: "kylar@mahoneytechsolutions.com",
       subject: `New Lead: ${cleanService} — ${cleanName}`,
       template: {
-        id: "YOUR_TEMPLATE_ID_HERE",
+        id: "new-lead-inquiry",
         variables: {
           NAME: cleanName,
           CONTACT: cleanContact,
