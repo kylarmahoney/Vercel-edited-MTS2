@@ -17,15 +17,13 @@ export async function POST(req) {
       from: "Mahoney Tech Solutions <noreply@mahoneytechsolutions.com>",
       to: "kylar@mahoneytechsolutions.com",
       subject: `New Lead: ${cleanService} — ${cleanName}`,
-      template: {
-        id: "new-lead-inquiry",
-        variables: {
-          NAME: cleanName,
-          CONTACT: cleanContact,
-          SERVICE: cleanService,
-          MESSAGE: cleanMessage,
-        },
-      },
+      html: `
+        <h2>New Lead</h2>
+        <p><strong>Name:</strong> ${cleanName}</p>
+        <p><strong>Contact:</strong> ${cleanContact}</p>
+        <p><strong>Service:</strong> ${cleanService}</p>
+        <p><strong>Message:</strong> ${cleanMessage}</p>
+      `,
     };
 
     if (isEmail) {
@@ -35,18 +33,13 @@ export async function POST(req) {
     const { data, error } = await resend.emails.send(payload);
 
     if (error) {
-      console.error("Resend error:", error);
-      return Response.json(
-        { error: error.message || "Failed to send email", details: error },
-        { status: 400 }
-      );
+      return Response.json({ error }, { status: 400 });
     }
 
     return Response.json({ success: true, data }, { status: 200 });
   } catch (err) {
-    console.error("API route error:", err);
     return Response.json(
-      { error: err.message || "Server error", details: err },
+      { error: err.message || "Server error" },
       { status: 500 }
     );
   }
