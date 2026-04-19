@@ -4,20 +4,19 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const { name, email, phone, service, message } = body;
+    const { name, email, phone, service, message } = await req.json();
 
     const payload = {
       from: "Mahoney Tech Solutions <noreply@mahoneytechsolutions.com>",
       to: "kylar@mahoneytechsolutions.com",
-      subject: `New Lead: ${service} — ${name}`,
+      subject: `New Lead: ${service || "Unknown Service"} — ${name || "Unknown Name"}`,
       html: `
         <h2>New Lead</h2>
-        <p><strong>Name:</strong> ${name || ""}</p>
-        <p><strong>Email:</strong> ${email || ""}</p>
-        <p><strong>Phone:</strong> ${phone || ""}</p>
-        <p><strong>Service:</strong> ${service || ""}</p>
-        <p><strong>Message:</strong> ${message || ""}</p>
+        <p><strong>Name:</strong> ${name || "Not provided"}</p>
+        <p><strong>Email:</strong> ${email || "Not provided"}</p>
+        <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+        <p><strong>Service:</strong> ${service || "Not provided"}</p>
+        <p><strong>Message:</strong> ${message || "Not provided"}</p>
       `,
     };
 
@@ -28,13 +27,13 @@ export async function POST(req) {
     const { data, error } = await resend.emails.send(payload);
 
     if (error) {
-      return new Response(JSON.stringify({ error }), { status: 400 });
+      return Response.json({ error }, { status: 400 });
     }
 
-    return new Response(JSON.stringify({ success: true, data }), { status: 200 });
+    return Response.json({ success: true, data });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message || "Server error" }),
+    return Response.json(
+      { error: err.message || "Server error" },
       { status: 500 }
     );
   }
