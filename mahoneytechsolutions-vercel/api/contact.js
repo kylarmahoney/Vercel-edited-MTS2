@@ -18,7 +18,7 @@ export async function POST(req) {
       to: "kylar@mahoneytechsolutions.com",
       subject: `New Lead: ${cleanService} — ${cleanName}`,
       template: {
-        alias: "new-lead-inquiry",
+        id: "YOUR_TEMPLATE_ID_HERE",
         variables: {
           NAME: cleanName,
           CONTACT: cleanContact,
@@ -35,13 +35,18 @@ export async function POST(req) {
     const { data, error } = await resend.emails.send(payload);
 
     if (error) {
-      return Response.json({ error }, { status: 400 });
+      console.error("Resend error:", error);
+      return Response.json(
+        { error: error.message || "Failed to send email", details: error },
+        { status: 400 }
+      );
     }
 
     return Response.json({ success: true, data }, { status: 200 });
   } catch (err) {
+    console.error("API route error:", err);
     return Response.json(
-      { error: err.message || "Server error" },
+      { error: err.message || "Server error", details: err },
       { status: 500 }
     );
   }
