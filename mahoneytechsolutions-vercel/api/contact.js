@@ -14,8 +14,8 @@ export async function POST(req) {
       html: `
         <h2>New Lead</h2>
         <p><strong>Name:</strong> ${name || ""}</p>
-        <p><strong>Email:</strong> ${email || "Not provided"}</p>
-        <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+        <p><strong>Email:</strong> ${email || ""}</p>
+        <p><strong>Phone:</strong> ${phone || ""}</p>
         <p><strong>Service:</strong> ${service || ""}</p>
         <p><strong>Message:</strong> ${message || ""}</p>
       `,
