@@ -8,17 +8,17 @@ export default async function handler(req, res) {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
-    const { name, email, service, message } = req.body;
+    const { name, contact, service, message } = req.body;
 
     await resend.emails.send({
       from: 'Mahoney Tech Solutions <noreply@mahoneytechsolutions.com>',
       to: 'kylar@mahoneytechsolutions.com',
-      replyTo: email,
+      replyTo: contact,
       subject: `New Lead: ${service} — ${name}`,
       html: `
         <h2>New Lead</h2>
         <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Contact:</strong> ${contact}</p>
         <p><strong>Service:</strong> ${service}</p>
         <p><strong>Message:</strong> ${message}</p>
       `,
